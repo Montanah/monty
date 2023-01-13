@@ -2,11 +2,12 @@
 #define MONTY_H
 
 #include <stdio.h>
-#include <unistd.h>
-#include <string.h>
 #include <stdlib.h>
-#include <ctype.h>
-#include <stdarg.h>
+#include <string.h>
+#include <unistd.h>
+
+#define STACK 0
+#define QUEUE 1
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -16,7 +17,6 @@
  * Description: doubly linked list node structure
  * for stack, queues, LIFO, FIFO Holberton project
  */
-
 typedef struct stack_s
 {
 	int n;
@@ -31,37 +31,44 @@ typedef struct stack_s
  * Description: opcode and its function
  * for stack, queues, LIFO, FIFO Holberton project
  */
-
 typedef struct instruction_s
 {
 	char *opcode;
-	void (*f)(stack_t **stack, unsigned int line_number);
+	int (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-extern stack_t *head;
+/**
+ * struct command_arg - a command and its argument (used in parsing and push)
+ * @command: a command/opcode
+ * @arg: an integer argument of the command (used for push)
+ * Description: if command is push, arg is pushed onto the stack/queue
+ * pushing is the only time this is used
+ */
+typedef struct command_arg
+{
+	char *command;
+	int arg;
+} command_arg;
 
-/*File operations*/
-
-void open_file(char *);
-void read_file(FILE *);
-int len_chars(FILE *);
-void interpret_line(char *, int);
-void find_func(char *, char *, int);
-
-/*Stack operations*/
-
-stack_t *create_node(int n);
-void print_stack(stack_t **, unsigned int);
-void add_to_stack(stack_t **, unsigned int);
-void call_fun(void (*f)(stack_t **, unsigned int), char *, char *, int);
-void print_top(stack_t **, unsigned int);
-void pop_top(stack_t **, unsigned int);
-void nop(stack_t **, unsigned int);
-void swap_nodes(stack_t **, unsigned int);
-void add_nodes(stack_t **, unsigned int);
-
-/*Error hanlding*/
-
-void err(int error_code, ...);
+extern unsigned int line_number;
+int (*get_func(char *command))(stack_t **stack, unsigned int line_number);
+command_arg *parse_line(char *line);
+void free_stack(stack_t *stack);
+int push_to_stack(stack_t **stack, int n, int s_or_q);
+int print_all(stack_t **stack, unsigned int line_number);
+int print_int(stack_t **stack, unsigned int line_number);
+int pop_int(stack_t **stack, unsigned int line_number);
+int swap_ints(stack_t **stack, unsigned int line_number);
+int add_ints(stack_t **stack, unsigned int line_number);
+int no_op(stack_t **stack, unsigned int line_number);
+int sub_ints(stack_t **stack, unsigned int line_number);
+int div_ints(stack_t **stack, unsigned int line_number);
+int  mul_ints(stack_t **stack, unsigned int line_number);
+int mod_ints(stack_t **stack, unsigned int line_number);
+int print_char(stack_t **stack, unsigned int line_number);
+int print_string(stack_t **stack, unsigned int line_number);
+int rotate_left(stack_t **stack, unsigned int line_number);
+int rotate_right(stack_t **stack, unsigned int line_number);
+int failure(stack_t **stack, unsigned int line_number);
 
 #endif

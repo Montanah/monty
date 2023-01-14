@@ -51,7 +51,7 @@ typedef struct command_arg
 	int arg;
 } command_arg;
 
-unsigned int line_number;
+extern unsigned int line_number;
 int (*get_func(char *command))(stack_t **stack, unsigned int line_number);
 command_arg *parse_line(char *line);
 void free_stack(stack_t *stack);

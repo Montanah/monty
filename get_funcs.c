@@ -1,5 +1,6 @@
 #include "monty.h"
 
+unsigned int line_number;
 /**
  * failure - exits program in case of invalid command
  * @stack: linked list representing stack

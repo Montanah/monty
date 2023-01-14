@@ -32,24 +32,23 @@ int main(int ac, char **av)
 
 	fp = fopen(av[1], "r");
 	chars_read = getline(&buf, &buf_size, fp);
-
 	while (chars_read > 0)
 	{
+		if (buf == NULL)
+		{
+			printf("Error: malloc failed\n");
+			i = EXIT_FAILURE;
+			break;
+		}
 		my_command = parse_line(buf);
 
 		if (my_command == NULL)
 		{
-			line_number++;
-			chars_read = getline(&buf, &buf_size, fp);
-			continue;
-		}
-		else if (my_command->command == NULL)
-		{
-			free(my_command);
-			printf("L%d: push integer\n", line_number);
 			i = EXIT_FAILURE;
 			break;
 		}
+		else if (my_command->command == NULL)
+			;
 		else if (strcmp(my_command->command, "push") == 0)
 			i = push_to_stack(&my_stack, my_command->arg, s_or_q);
 		else if (strcmp(my_command->command, "stack") == 0)
@@ -59,14 +58,18 @@ int main(int ac, char **av)
 		else
 			i = (get_func(my_command->command))(&my_stack,
 					line_number);
+
 		line_number++;
 		chars_read = getline(&buf, &buf_size, fp);
+
 		free(my_command);
 
 		if (i == EXIT_FAILURE)
 			break;
 	}
-	free(buf);
+
+	if (buf != NULL)
+		free(buf);
 	fclose(fp);
 	free_stack(my_stack);
 	return (i);

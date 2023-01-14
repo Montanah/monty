@@ -1,5 +1,6 @@
 #ifndef MONTY_H
 #define MONTY_H
+#define  _POSIX_C_SOURCE 200809L
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,7 +51,7 @@ typedef struct command_arg
 	int arg;
 } command_arg;
 
-extern unsigned int line_number;
+unsigned int line_number;
 int (*get_func(char *command))(stack_t **stack, unsigned int line_number);
 command_arg *parse_line(char *line);
 void free_stack(stack_t *stack);

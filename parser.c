@@ -1,5 +1,6 @@
 #include "monty.h"
 
+unsigned int line_number;
 /**
  * parse_line - parses a line from bytecode file
  * @line: line from file
